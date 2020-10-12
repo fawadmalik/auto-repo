@@ -1,0 +1,11 @@
+[
+	{
+		"username": "ZmlvcmVsbGFtZ2FsbG9AZ21haWwuY29t",
+		"password": "VGVtcG9yYXJ5MTIz",
+		"sessionLength": "1",
+		"sessionTimeUnit": "DAYS",
+		"pointLimit": "400",
+		"pointDiff": "-350",
+		"pointDiffFin": "1000"
+	}
+]

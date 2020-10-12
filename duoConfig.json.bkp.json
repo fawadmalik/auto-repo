@@ -1,0 +1,34 @@
+[
+	{
+		"username": "em0uY29kZXIuZ2FtZXJAZ21haWwuY29t",
+		"password": "cTF3MmUzcjQ",
+		"sessionLength": "1",
+		"sessionTimeUnit": "DAYS",
+		"smart": "true",
+		"pointLimit": "5000"
+	},
+	{
+		"username": "cGluY2guaGl0dGVyQGhvdG1haWwuY29t",
+		"password": "cTF3MmUzcjQ",
+		"sessionLength": "1",
+		"sessionTimeUnit": "DAYS",
+		"smart": "true",
+		"pointLimit": "10000"
+	},
+	{
+		"username": "ZmF3YWQubWFsaWtAaG90bWFpbC5jb20",
+		"password": "UTF3MmUzcjQh",
+		"sessionLength": "1",
+		"sessionTimeUnit": "DAYS",
+		"smart": "true",
+		"pointLimit": "10000"
+	},
+	{
+		"username": "YmFza2V0YmFsbDY2NnByb0BvdXRsb29rLmNvbQ0K",
+		"password": "cTF3MmUzcjQ",
+		"sessionLength": "1",
+		"sessionTimeUnit": "DAYS",
+		"smart": "true",
+		"pointLimit": "10000"
+	}
+]

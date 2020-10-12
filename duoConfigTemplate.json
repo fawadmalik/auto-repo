@@ -1,0 +1,14 @@
+[
+	{
+		"username": "Your Username",
+		"password":"Your password",
+		"sessionLength": "1",
+		"sessionTimeUnit": "MINUTES",
+		"smart": "true"
+	}
+]
+// Add more config data to run multiple accounts
+// Enclose each of the config data entries between braces {} as shown above 
+// Separate each config data with comma as shown below
+// [{...},{...},{...}]
+// Save you configuration in a file called duoConfig.json, in the same directory as this template
