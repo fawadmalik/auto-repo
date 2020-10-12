@@ -1,4 +1,4 @@
-package com.e2eqa.seleniumAutomationDmitry.duoPageTests;
+package com.e2eqa.autoRepoZiad.duoPageTests;
 
 import static org.testng.Assert.assertTrue;
 
@@ -29,8 +29,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.e2eqa.seleniumAutomationDmitry.base.BrowserDriverFactory;
-import com.e2eqa.seleniumAutomationDmitry.pages.DuoPageObject;
+import com.e2eqa.autoRepoZiad.base.BrowserDriverFactory;
+import com.e2eqa.autoRepoZiad.pages.DuoPageObject;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;

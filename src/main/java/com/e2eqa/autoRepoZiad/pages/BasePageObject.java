@@ -1,4 +1,4 @@
-package com.e2eqa.seleniumAutomationDmitry.pages;
+package com.e2eqa.autoRepoZiad.pages;
 
 import java.util.Iterator;
 import java.util.List;

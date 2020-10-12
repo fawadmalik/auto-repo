@@ -1,4 +1,4 @@
-package com.e2eqa.seleniumAutomationDmitry.duoPageTests;
+package com.e2eqa.autoRepoZiad.duoPageTests;
 
 import java.util.List;
 

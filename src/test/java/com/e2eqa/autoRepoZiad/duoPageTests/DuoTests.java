@@ -1,4 +1,4 @@
-package com.e2eqa.seleniumAutomationDmitry.duoPageTests;
+package com.e2eqa.autoRepoZiad.duoPageTests;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.e2eqa.seleniumAutomationDmitry.base.TestUtilities;
+import com.e2eqa.autoRepoZiad.base.TestUtilities;
 
 import lombok.extern.log4j.Log4j2;
 

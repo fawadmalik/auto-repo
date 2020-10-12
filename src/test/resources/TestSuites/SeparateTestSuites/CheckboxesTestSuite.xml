@@ -4,7 +4,7 @@
 	
 	<test name="CheckboxesTests">
 		<classes>
-			<class name="com.e2eqa.seleniumAutomationDmitry.checkboxespagetests.CheckboxesTests" />
+			<class name="com.e2eqa.autoRepoZiad.checkboxespagetests.CheckboxesTests" />
 		</classes>
 	</test>
 	

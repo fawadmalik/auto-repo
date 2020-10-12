@@ -1,4 +1,4 @@
-package com.e2eqa.seleniumAutomationDmitry.base;
+package com.e2eqa.autoRepoZiad.base;
 
 public class TestUtilities extends TestBase {
 

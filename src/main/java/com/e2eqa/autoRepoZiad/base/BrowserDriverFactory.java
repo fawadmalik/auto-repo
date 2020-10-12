@@ -1,4 +1,4 @@
-package com.e2eqa.seleniumAutomationDmitry.base;
+package com.e2eqa.autoRepoZiad.base;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;

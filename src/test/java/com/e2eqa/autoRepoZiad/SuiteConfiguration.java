@@ -1,4 +1,4 @@
-package com.e2eqa.seleniumAutomationDmitry;
+package com.e2eqa.autoRepoZiad;
 
 import java.io.File;
 import java.io.IOException;

@@ -4,7 +4,7 @@
 	
 	<test name="PositiveLogInTest">
 		<classes>
-			<class name="com.e2eqa.seleniumAutomationDmitry.loginpagetests.PositiveLogInTests" />
+			<class name="com.e2eqa.autoRepoZiad.loginpagetests.PositiveLogInTests" />
 		</classes>
 	</test>
 	

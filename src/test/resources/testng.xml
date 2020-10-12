@@ -3,10 +3,10 @@
 <suite name="Tests" verbose="5" data-provider-thread-count="1">
 	<test name="Test1">
 		<parameter name="browser" value="chrome"></parameter>
-		<parameter name="headless" value="false"></parameter>
+		<parameter name="headless" value="true"></parameter>
 		<classes>
 			<class
-				name="com.e2eqa.seleniumAutomationDmitry.duoPageTests.DuoTests" />
+				name="com.e2eqa.autoRepoZiad.duoPageTests.DuoTests" />
 		</classes>
 	</test>
 </suite>
