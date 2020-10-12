@@ -14,12 +14,4 @@ Source: https://github.com/barancev/webdriver-testng-archetype
 
 mvn archetype:generate -DarchetypeGroupId=ru.stqa.selenium -DarchetypeArtifactId=webdriver-testng-archetype -DarchetypeVersion=4.5 -DgroupId=com.e2eqa.seleniumAutomationDmitry -DartifactId=selenium-automation-dmitry -DinteractiveMode=false
 
-{
-	"username": "ZmF3YWQubWFsaWtAaG90bWFpbC5jb20",
-	"password":"UTF3MmUzcjQh",
-	"session": {
-			"length":"3",
-			"timeUnit":"HOURS"
-		}
-}
 ```
