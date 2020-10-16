@@ -161,6 +161,7 @@ public class DuoLogic {
 		int totalPoints = 0;
 		int storyPoints = 0;
 		int totalStoriesCompleted = 0;
+		List<String> badStories = new ArrayList<String>();
 
 		while (quittingTime != true) {
 			try {
@@ -182,19 +183,26 @@ public class DuoLogic {
 				wait15Sec.until(ExpectedConditions.elementToBeClickable(allStoriesLoc));
 				List<WebElement> allStoryLinkElems = driver.findElements(allStoriesLoc);
 
+
 				boolean storyFound = false;
 				if (allStoryLinkElems.size() != 0) {
 					for (WebElement storyLink : allStoryLinkElems) {
 						String storyLinkText = storyLink.getText();
-
 						// skip bad stories(0 XP), no storyLinkText
-						if (storyLinkText == null || storyLinkText.contains("+0 XP") == true
-								|| storyLinkText.length() < 1) {
+						if (storyLinkText == null || storyLinkText.length() < 1
+								|| storyLinkText.contains("+0 XP") == true) {
 							continue;
 						} else {
-							log.info(storyLinkText);
-							int pos = storyLinkText.indexOf("XP");
-							storyPoints = Integer.parseInt(storyLinkText.substring(pos - 3, pos).trim());
+							String[] storyLinkTextParts = storyLinkText.split("\\+");
+							String storyName = storyLinkTextParts[0].replaceAll("\\n", "");
+							String points = storyLinkTextParts[1].replace("XP", "").trim();
+
+							if(badStories.contains(storyName) == true) {
+								continue;
+							}
+
+							log.info("story: " + storyName + ", points: " + points);
+							storyPoints = Integer.parseInt(points);
 
 							log.info("points:" + storyPoints);
 							storyFound = true;
@@ -217,16 +225,22 @@ public class DuoLogic {
 							int steps = 0;
 							boolean storyDone = false;
 							while (storyDone == false) {
-								continueStoryWithCheck();
+								boolean isWarning = continueStoryWithCheck();
+								if(isWarning) {
+									badStories.add(storyName);
+									log.info("Skip this bad story next time:" + storyName);
+								}
 								storyDone = clickStoryDone();
-								if (++steps >= 40) {
+								if(storyDone && !isWarning) {
+									totalPoints += storyPoints;
+									totalStoriesCompleted++;
+								}
+								if (++steps > 40) {
+									log.info("Story not completed. Quitting because steps > 40");
 									storyDone = true;
 								}
 							}
 							write2Smart();
-
-							totalPoints += storyPoints;
-							totalStoriesCompleted++;
 							log.info("totals: points:" + totalPoints + " stories:" + totalStoriesCompleted);
 							duoPage.openPage("stories");
 							break;
@@ -303,10 +317,16 @@ public class DuoLogic {
 		return answers;
 	}
 
-	private void continueStoryWithCheck() {
+	private boolean continueStoryWithCheck() {
+		boolean isWarning = false;
 		By contBtnLoc = By.xpath("//button[@data-test='stories-player-continue']");
 		try {
+			List<WebElement> storyCompleteWarnElems =
+					driver.findElements(By.xpath("//h2[contains(.,'Try a new story to earn XP!')]"));
+			isWarning = storyCompleteWarnElems.size() > 0;
+
 			WebElement contBtn = driver.findElements(contBtnLoc).get(0);
+
 			int stage = 0;
 			while (contBtn.getAttribute("disabled") != null) {
 				boolean blocked = detectStage(stage);
@@ -347,15 +367,16 @@ public class DuoLogic {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return isWarning;
 	}
 
 	private boolean clickStoryDone() {
 		By doneBtnLoc = By.xpath("//button[@data-test='stories-player-done']");
-		try {
-			driver.findElements(doneBtnLoc).get(0).click();
+		List<WebElement> elems = driver.findElements(doneBtnLoc);
+		if(elems.size() == 0) { return false; }
+		else {
+			elems.get(0).click();
 			return true;
-		} catch (Exception e) {
-			return false;
 		}
 	}
 
