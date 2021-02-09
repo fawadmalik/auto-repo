@@ -51,7 +51,7 @@ public class DuoLogic {
 	private final String NAME = "name";
 	private final String POSITION = "position";
 	private final String SCORE = "score";
-	private final String  WINNER = "Fiorella";
+	private final String  WINNER = "Bazinian";
 	private int DAYS_LEFT_LB;
 
 	public DuoLogic(String browser, boolean headless, DuoConfig duoConfig) {
@@ -655,7 +655,7 @@ public class DuoLogic {
 		String[] partsLB = timeLeftLB.split(" ");
 		DAYS_LEFT_LB = Integer.parseInt(partsLB[0].replace("D", ""));
 		
-		String xpathAll = "//h2[contains(.,'Diamond League')]/parent::div/parent::div/following-sibling::div[@class='_2Rsru']/div/*";
+		String xpathAll = "//h2[contains(.,'Diamond League')]/parent::div/parent::div/following-sibling::div[contains(@class,'_2Rsru')]/div/*";
 		List<WebElement> elems = driver.findElements(By.xpath(xpathAll));
 		
 		assertTrue(elems.size() > 0, "Leaderboard entries not found in getLeaderBoard");
