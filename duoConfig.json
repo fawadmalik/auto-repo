@@ -1,11 +1,11 @@
 [
 	{
-		"username": "YmF6aW5pYW4=",
-		"password": "QWdpbGVfdGVzdGVyMQ==",
+		"username": "RGF2aWRBaGxmZWxk",
+		"password": "ZGF2aWQxOTg4",
 		"sessionLength": "1",
 		"sessionTimeUnit": "DAYS",
-		"pointLimit": "10",
-		"pointDiff": "10",
-		"pointDiffFin": "10"
+		"pointLimit": "100",
+		"pointDiff": "50",
+		"pointDiffFin": "50"
 	}
 ]
