@@ -71,7 +71,7 @@ public class DuoTests extends TestUtilities {
 					 pointLimit,
 					 pointDiff,
 					 pointDiffFin,
-					 (String) jsonObject.get("password"))
+					 (String) jsonObject.get("winner"))
 				);
 			}
 			duoconfigs = duoConfigList.toArray(new DuoConfig[0]);
