@@ -51,7 +51,7 @@ public class DuoLogic {
 	private final String NAME = "name";
 	private final String POSITION = "position";
 	private final String SCORE = "score";
-	private final String  WINNER = "Bazinian";
+	private final String  WINNER = "David";
 	private int DAYS_LEFT_LB;
 
 	public DuoLogic(String browser, boolean headless, DuoConfig duoConfig) {
