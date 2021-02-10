@@ -70,7 +70,8 @@ public class DuoTests extends TestUtilities {
 					timeUnit,
 					 pointLimit,
 					 pointDiff,
-					 pointDiffFin)
+					 pointDiffFin,
+					 (String) jsonObject.get("winner"))
 				);
 			}
 			duoconfigs = duoConfigList.toArray(new DuoConfig[0]);

@@ -51,7 +51,7 @@ public class DuoLogic {
 	private final String NAME = "name";
 	private final String POSITION = "position";
 	private final String SCORE = "score";
-	private final String  WINNER = "Bazinian";
+	private String  winner = "";
 	private int DAYS_LEFT_LB;
 
 	public DuoLogic(String browser, boolean headless, DuoConfig duoConfig) {
@@ -101,13 +101,15 @@ public class DuoLogic {
 		log.info("click login button");
 		WebElement loginBtn = findElementByXpath("//button[@data-test='register-button']");
 		loginBtn.click();
+		
+		this.winner = duoConfig.getWinner();
 
 		boolean quittingTime = false;
 		final LocalDateTime startTime = LocalDateTime.now();
 		// time limit to calculate if timeIsUp to set quittingTime = true
 		final long timeLimit = (long) duoConfig.getSessionLength();
 		final ChronoUnit timeUnit = duoConfig.getChronoUnit();
-		int pointLimit = (int) duoConfig.getPointLimit();		
+		int pointLimit = duoConfig.getPointLimit();		
 		int pointDiffConfig = duoConfig.getPointDiff();
 		int pointDiffFin = duoConfig.getPointDiffFin();
 		
@@ -118,7 +120,7 @@ public class DuoLogic {
 		Map<String,String> infoLBFirst = leaderBoard.get(0);
 		Map<String,String> infoLBSecond = leaderBoard.get(1);
 		
-		if(infoLBFirst.get(NAME).equals(WINNER)) {
+		if(infoLBFirst.get(NAME).equals(this.winner)) {
 			int myPoints = Integer.parseInt(infoLBFirst.get(SCORE));
 			int theirPoints = Integer.parseInt(infoLBSecond.get(SCORE));
 			int pointDiffLB = myPoints - theirPoints;
@@ -663,15 +665,15 @@ public class DuoLogic {
 		WebElement firstPositionElem = elems.get(0);
 		
 		WebElement secondPositionElem = null;
-		if(firstPositionElem.getText().contains(WINNER)) {
+		if(firstPositionElem.getText().contains(this.winner)) {
 			secondPositionElem = elems.get(1);
 		}
 		else {
 			List<WebElement> myElems = elems
 					.stream()
-					.filter(elem -> elem.getText().contains(WINNER))
+					.filter(elem -> elem.getText().contains(this.winner))
 					.collect(Collectors.toList());
-			assertTrue(myElems.size() > 0, String.format("Missing from %d leaderboard entries; %s", myElems.size(), WINNER));
+			assertTrue(myElems.size() > 0, String.format("Missing from %d leaderboard entries; %s", myElems.size(), this.winner));
 			secondPositionElem = myElems.get(0);
 		}
 		

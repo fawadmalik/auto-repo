@@ -1,11 +1,12 @@
 [
 	{
-		"username": "YmF6aW5pYW4=",
-		"password": "QWdpbGVfdGVzdGVyMQ==",
+		"username": "RGF2aWRBaGxmZWxk",
+		"password": "ZGF2aWQxOTg4",
 		"sessionLength": "1",
 		"sessionTimeUnit": "DAYS",
-		"pointLimit": "2400",
-		"pointDiff": "5000",
-		"pointDiffFin": "5000"
+		"pointLimit": "100",
+		"pointDiff": "50",
+		"pointDiffFin": "50",
+		"winner":"RGF2aWQ="
 	}
 ]
