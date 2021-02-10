@@ -6,6 +6,7 @@
 		"sessionTimeUnit": "DAYS",
 		"pointLimit": "100",
 		"pointDiff": "50",
-		"pointDiffFin": "50"
+		"pointDiffFin": "50",
+		"winner":"RGF2aWQ="
 	}
 ]
