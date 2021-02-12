@@ -5,8 +5,9 @@
 		"sessionLength": "1",
 		"sessionTimeUnit": "DAYS",
 		"pointLimit": "1000",
-		"pointDiff": "100",
+		"pointDiff": "1000",
 		"pointDiffFin": "77",
-		"winner":"RGF2aWQ="
+		"winner":"RGF2aWQ=",
+		"leagueName": "RGlhbW9uZCBMZWFndWU="
 	}
 ]
