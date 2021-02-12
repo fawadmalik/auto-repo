@@ -19,10 +19,11 @@ public class DuoConfig {
 	private int pointDiff;
 	private int pointDiffFin;
 	private String winner;
-	
+	private String leagueName;
+
 	private ChronoUnit chronoUnit;
 	
-	public DuoConfig(String username, String password, int sessionLength, String sessionTimeUnit, int pointLimit, int pointDiff, int pointDiffFin, String winner) {
+	public DuoConfig(String username, String password, int sessionLength, String sessionTimeUnit, int pointLimit, int pointDiff, int pointDiffFin, String winner, String leagueName) {
 		this.username = new String (Base64.getDecoder().decode(username));
 		this.password = new String (Base64.getDecoder().decode(password));
 		this.sessionLength = sessionLength;
@@ -31,7 +32,8 @@ public class DuoConfig {
 		this.pointDiff = pointDiff;
 		this.pointDiffFin = pointDiffFin;
 		this.winner = new String (Base64.getDecoder().decode(winner));
-		
+		this.leagueName = new String (Base64.getDecoder().decode(leagueName));
+
 		setChronoUnit(this.sessionTimeUnit);
 	}
 

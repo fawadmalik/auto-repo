@@ -113,7 +113,7 @@ public class DuoLogic {
 		int pointDiffConfig = duoConfig.getPointDiff();
 		int pointDiffFin = duoConfig.getPointDiffFin();
 		
-		List<Map<String, String>> leaderBoard  = getLeaderBoard();
+		List<Map<String, String>> leaderBoard  = getLeaderBoard(duoConfig.getLeagueName());
 		log.info(DAYS_LEFT_LB);
 		leaderBoard.stream().forEach(map -> log.info(map));
 		
@@ -642,13 +642,13 @@ public class DuoLogic {
 		return driver.findElements(By.xpath("//button[@data-test='stories-token']")).size() > 0;
 	}
 
-	private List<Map<String, String>> getLeaderBoard() {
+	private List<Map<String, String>> getLeaderBoard(String leagueName) {
 		List<Map<String, String>> leaderBoard = new ArrayList<Map<String,String>>();
-		String xpathLB = "//h2[contains(.,'Diamond League')]";
+		String xpathLB = "//h2[contains(.,'" + leagueName + "')]";
 		new WebDriverWait(driver, 20).until(
 				ExpectedConditions.visibilityOfElementLocated(
 						By.xpath(xpathLB)));
-		//$x("//h2[contains(.,'Diamond League')]/parent::div/following-sibling::div/span")[0].innerText
+		//$x("//h2[contains(.,'" + leagueName + "')]/parent::div/following-sibling::div/span")[0].innerText
 		String xpathLBDaysLeft = xpathLB + "/parent::div/following-sibling::div/span";
 		String timeLeftLB = driver.findElement(By.xpath(xpathLBDaysLeft)).getText()
 				.replace("D", "")
@@ -657,7 +657,7 @@ public class DuoLogic {
 		String[] partsLB = timeLeftLB.split(" ");
 		DAYS_LEFT_LB = Integer.parseInt(partsLB[0].replace("D", ""));
 		
-		String xpathAll = "//h2[contains(.,'Diamond League')]/parent::div/parent::div/following-sibling::div[contains(@class,'_2Rsru')]/div/*";
+		String xpathAll = "//h2[contains(.,'" + leagueName + "')]/parent::div/parent::div/following-sibling::div[contains(@class,'_2Rsru')]/div/*";
 		List<WebElement> elems = driver.findElements(By.xpath(xpathAll));
 		
 		assertTrue(elems.size() > 0, "Leaderboard entries not found in getLeaderBoard");

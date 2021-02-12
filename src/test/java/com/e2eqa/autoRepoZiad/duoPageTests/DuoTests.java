@@ -71,8 +71,9 @@ public class DuoTests extends TestUtilities {
 					 pointLimit,
 					 pointDiff,
 					 pointDiffFin,
-					 (String) jsonObject.get("winner"))
-				);
+						(String) jsonObject.get("winner"),
+						(String) jsonObject.get("leagueName")
+				));
 			}
 			duoconfigs = duoConfigList.toArray(new DuoConfig[0]);
 		} catch (IOException | ParseException e) {
