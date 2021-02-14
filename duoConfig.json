@@ -4,8 +4,8 @@
 		"password": "ZGF2aWQxOTg4",
 		"sessionLength": "1",
 		"sessionTimeUnit": "DAYS",
-		"pointLimit": "1000",
-		"pointDiff": "1000",
+		"pointLimit": "6000",
+		"pointDiff": "5777",
 		"pointDiffFin": "77",
 		"winner":"RGF2aWQ=",
 		"leagueName": "RGlhbW9uZCBMZWFndWU="
