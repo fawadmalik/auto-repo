@@ -44,6 +44,8 @@ public class DuoLogic {
 	private String browser;
 	private boolean headless;
 	private DuoConfig duoConfig;
+	private int totalPoints = 0;
+	private int totalStoriesCompleted = 0;
 
 	private Map<String, String> answers;
 	private String language;
@@ -53,6 +55,8 @@ public class DuoLogic {
 	private final String SCORE = "score";
 	private String  winner = "";
 	private int DAYS_LEFT_LB;
+	private WebDriverWait wait15Sec;
+	private WebDriverWait wait5Sec;
 
 	public DuoLogic(String browser, boolean headless, DuoConfig duoConfig) {
 		this.browser = browser;
@@ -62,6 +66,9 @@ public class DuoLogic {
 		this.language = "";
 
 		createDriver();
+
+		wait15Sec = new WebDriverWait(driver, 15, 1000L);
+		wait5Sec = new WebDriverWait(driver, 5L, 1000L);
 	}
 
 	private void createDriver() {
@@ -112,7 +119,14 @@ public class DuoLogic {
 		int pointLimit = duoConfig.getPointLimit();		
 		int pointDiffConfig = duoConfig.getPointDiff();
 		int pointDiffFin = duoConfig.getPointDiffFin();
-		
+
+		// is leaderboard section visible yet?
+		wait15Sec.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='_16nyP']")));
+
+		// Is leaderboard available?
+		if(driver.findElements(By.xpath("//*[contains(text(),'Complete a lesson to join this week')]")).size() > 0){
+			doOneStory(duoPage, new ArrayList<String>());
+		}
 		List<Map<String, String>> leaderBoard  = getLeaderBoard(duoConfig.getLeagueName());
 		log.info(DAYS_LEFT_LB);
 		leaderBoard.stream().forEach(map -> log.info(map));
@@ -127,7 +141,7 @@ public class DuoLogic {
 
 			// you are the winner and now should you be worried that #2 will catch up
 			if(pointDiffLB < pointDiffConfig) {
-				log.info(String.format("BEF::pointLimit=%s, pointDiffConfig=%s, pointDiffLB=%s", 
+ 				log.info(String.format("BEF::pointLimit=%s, pointDiffConfig=%s, pointDiffLB=%s",
 						pointLimit, pointDiffConfig, pointDiffLB));
 				pointLimit = pointDiffConfig - pointDiffLB;
 				log.info(String.format("AFT::pointLimit=%s, pointDiffConfig=%s, pointDiffLB=%s", 
@@ -159,91 +173,27 @@ public class DuoLogic {
 		if(DAYS_LEFT_LB == 1) {
 			pointLimit += pointDiffFin;
 		}
-				
-		int totalPoints = 0;
-		int storyPoints = 0;
 		int totalStoriesCompleted = 0;
 		List<String> badStories = new ArrayList<String>();
 
 		while (quittingTime != true) {
 			try {
-				log.info("click stories link");
-				By storiesNavLoc = By.xpath("//a[@data-test='stories-nav']");
-				WebDriverWait wait15Sec = new WebDriverWait(driver, 15, 1000L);
-				try {
-					wait15Sec.until(ExpectedConditions.visibilityOfElementLocated(storiesNavLoc));
-				} catch (Exception ex) {
-					duoPage.openPage();
-					wait15Sec.until(ExpectedConditions.visibilityOfElementLocated(storiesNavLoc));
-				}
-				wait15Sec.until(ExpectedConditions.elementToBeClickable(storiesNavLoc));
-				driver.findElements(storiesNavLoc).get(0).click();
-
-				// go to the stories page
-				By allStoriesLoc = By.xpath("//a[@data-test='story-container' and starts-with(@href, '/stories')]");
-				wait15Sec.until(ExpectedConditions.presenceOfElementLocated(allStoriesLoc));
-				wait15Sec.until(ExpectedConditions.elementToBeClickable(allStoriesLoc));
-				List<WebElement> allStoryLinkElems = driver.findElements(allStoriesLoc);
-
+				List<WebElement> allStoryLinkElems = getAllStoryLinks(duoPage);
 
 				boolean storyFound = false;
 				if (allStoryLinkElems.size() != 0) {
 					for (WebElement storyLink : allStoryLinkElems) {
-						String storyLinkText = storyLink.getText();
+
 						// skip bad stories(0 XP), no storyLinkText
-						if (storyLinkText == null || storyLinkText.length() < 1
-								|| storyLinkText.contains("+0 XP") == true) {
+						Map<String, String> storyLinkInfo = getStoryLinkInfo(storyLink, badStories);
+						if(!Boolean.parseBoolean(storyLinkInfo.get("isGoodStory"))) {
 							continue;
-						} else {
-							String[] storyLinkTextParts = storyLinkText.split("\\+");
-							String storyName = storyLinkTextParts[0].replaceAll("\\n", "");
-							String points = storyLinkTextParts[1].replace("XP", "").trim();
-
-							if(badStories.contains(storyName) == true) {
-								continue;
-							}
-
-							log.info("story: " + storyName + ", points: " + points);
-							storyPoints = Integer.parseInt(points);
-
-							log.info("points:" + storyPoints);
+						}
+						else {
 							storyFound = true;
-							String hostUrl = 
-									new String (Base64.getDecoder().decode("aHR0cHM6Ly93d3cuZHVvbGluZ28uY29tLw"));							
-							String storyURL = storyLink.getAttribute("href").replace(hostUrl, "");
-
-							log.info("storyURL:" + storyURL);
-							duoPage.openPage(storyURL);
-
-							this.language = storyURL.replace("stories/", "").substring(0, 2);
-							answers = readAnswers();
-
-							By startStoryLoc = By.xpath("//button[@data-test='story-start']");
-							WebDriverWait wdWait = new WebDriverWait(driver, 5L);
-							wdWait.until(ExpectedConditions.presenceOfElementLocated(startStoryLoc));
-							wdWait.until(ExpectedConditions.elementToBeClickable(startStoryLoc));
-							driver.findElements(startStoryLoc).get(0).click();
-
-							int steps = 0;
-							boolean storyDone = false;
-							while (storyDone == false) {
-								boolean isWarning = continueStoryWithCheck();
-								if(isWarning) {
-									badStories.add(storyName);
-									log.info("Skip this bad story next time:" + storyName);
-								}
-								storyDone = clickStoryDone();
-								if(storyDone && !isWarning) {
-									totalPoints += storyPoints;
-									totalStoriesCompleted++;
-								}
-								if (++steps > 40) {
-									log.info("Story not completed. Quitting because steps > 40");
-									storyDone = true;
-								}
-							}
+							processStory(duoPage, storyLinkInfo, badStories);
 							write2Smart();
-							log.info("totals: points:" + totalPoints + " stories:" + totalStoriesCompleted);
+							log.info("totals: points:" + this.totalPoints + " stories:" + this.totalStoriesCompleted);
 							duoPage.openPage("stories");
 							break;
 						}
@@ -276,6 +226,106 @@ public class DuoLogic {
 //		getLeaderBoard().stream().forEach(map -> log.info(map));
 //		
 //		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	}
+
+	private void processStory(DuoPageObject duoPage, Map<String, String> storyLinkInfo, List<String> badStories) {
+		String storyName = storyLinkInfo.get("storyName");
+		String points = storyLinkInfo.get("points");
+
+		log.info("story: " + storyName + ", points: " + points);
+		int storyPoints = Integer.parseInt(points);
+
+		log.info("points:" + storyPoints);
+
+		log.info("storyURL:" + storyLinkInfo.get("storyURL"));
+		duoPage.openPage(storyLinkInfo.get("storyURL"));
+
+		this.language = storyLinkInfo.get("storyURL").replace("stories/", "").substring(0, 2);
+		this.answers = readAnswers();
+
+		By startStoryLoc = By.xpath("//button[@data-test='story-start']");
+		wait5Sec.until(ExpectedConditions.presenceOfElementLocated(startStoryLoc));
+		wait5Sec.until(ExpectedConditions.elementToBeClickable(startStoryLoc));
+		driver.findElements(startStoryLoc).get(0).click();
+
+		int steps = 0;
+		boolean storyDone = false;
+		while (storyDone == false) {
+			boolean isWarning = continueStoryWithCheck();
+			if(isWarning) {
+				badStories.add(storyName);
+				log.info("Skip this bad story next time:" + storyName);
+			}
+			storyDone = clickStoryDone();
+			if(storyDone && !isWarning) {
+				this.totalPoints += storyPoints;
+				totalStoriesCompleted++;
+			}
+			if (++steps > 40) {
+				log.info("Story not completed. Quitting because steps > 40");
+				storyDone = true;
+			}
+		}
+	}
+
+	private List<WebElement> getAllStoryLinks(DuoPageObject duoPage) {
+		log.info("click stories link");
+		By storiesNavLoc = By.xpath("//a[@data-test='stories-nav']");
+		try {
+			wait15Sec.until(ExpectedConditions.visibilityOfElementLocated(storiesNavLoc));
+		} catch (Exception ex) {
+			duoPage.openPage();
+			wait15Sec.until(ExpectedConditions.visibilityOfElementLocated(storiesNavLoc));
+		}
+		wait15Sec.until(ExpectedConditions.elementToBeClickable(storiesNavLoc));
+		driver.findElements(storiesNavLoc).get(0).click();
+
+		// go to the stories page
+		By allStoriesLoc = By.xpath("//a[@data-test='story-container' and starts-with(@href, '/stories')]");
+		wait15Sec.until(ExpectedConditions.presenceOfElementLocated(allStoriesLoc));
+		wait15Sec.until(ExpectedConditions.elementToBeClickable(allStoriesLoc));
+
+		return driver.findElements(allStoriesLoc);
+	}
+
+	private Map<String, String> getStoryLinkInfo(WebElement storyLink, List<String> badStories) {
+		Map<String, String> storyLinkInfo = new HashMap<>();
+
+		String storyLinkText = storyLink.getText();
+		if (
+			storyLinkText == null
+			|| storyLinkText.trim().length() < 1
+			|| storyLinkText.contains("+0 XP") == true ) {
+
+			storyLinkInfo.put("isGoodStory", "false");
+		}
+		else{
+			String[] storyLinkTextParts = storyLinkText.split("\\+");
+			String storyName = storyLinkTextParts[0].replaceAll("\\n", "");
+			String points = storyLinkTextParts[1].replace("XP", "").trim();
+
+			if(badStories.contains(storyName)){
+				storyLinkInfo.put("isGoodStory", "false");
+			}
+			else{
+				storyLinkInfo.put("isGoodStory", "true");
+				storyLinkInfo.put("storyName", storyName);
+				storyLinkInfo.put("points", points);
+				String hostUrl = new String (Base64.getDecoder().decode("aHR0cHM6Ly93d3cuZHVvbGluZ28uY29tLw"));
+				storyLinkInfo.put("storyURL", storyLink.getAttribute("href").replace(hostUrl, ""));
+			}
+		}
+		return storyLinkInfo;
+	}
+
+	private void doOneStory(DuoPageObject duoPage, ArrayList<String> badStories) {
+		WebElement storyLink = getAllStoryLinks(duoPage).get(0);
+		Map<String, String> storyLinkInfo = getStoryLinkInfo(storyLink, badStories);
+		log.info("storyURL:" + storyLinkInfo.get("storyURL"));
+		duoPage.openPage(storyLinkInfo.get("storyURL"));
+
+		processStory(duoPage, storyLinkInfo, badStories);
+		duoPage.openPage("learn");
 	}
 
 	/**
