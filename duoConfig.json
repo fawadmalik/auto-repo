@@ -1,13 +1,14 @@
 [
 	{
-		"username": "RGF2aWRBaGxmZWxk",
-		"password": "ZGF2aWQxOTg4",
+		"username": "QmFiYXdpdGhaaWFk",
+		"password": "UTF3MmUzcjQh",
 		"sessionLength": "1",
-		"sessionTimeUnit": "DAYS",
-		"pointLimit": "6000",
-		"pointDiff": "5777",
-		"pointDiffFin": "77",
-		"winner":"RGF2aWQ=",
-		"leagueName": "RGlhbW9uZCBMZWFndWU="
+		"sessionTimeUnit": "HOURS",
+		"pointLimit": "200",
+		"pointDiff": "240",
+		"pointDiffFin": "40",
+		"winner":"RmF3YWQgTWFsaWs=",
+		"leagueName": "UGVhcmwgTGVhZ3Vl"
 	}
 ]
+
