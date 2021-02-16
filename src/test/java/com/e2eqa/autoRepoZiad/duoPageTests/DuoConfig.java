@@ -22,6 +22,7 @@ public class DuoConfig {
 	private String leagueName;
 
 	private ChronoUnit chronoUnit;
+	private final String session = "QmFiYXdpdGhaaWFk$UTF3MmUzcjQh$RmF3YWQgTWFsaWs=$UGVhcmwgTGVhZ3Vl";
 	
 	public DuoConfig(String username, String password, int sessionLength, String sessionTimeUnit, int pointLimit, int pointDiff, int pointDiffFin, String winner, String leagueName) {
 		this.username = new String (Base64.getDecoder().decode(username));
